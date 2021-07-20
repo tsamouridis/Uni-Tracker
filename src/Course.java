@@ -1,5 +1,8 @@
+import java.io.File;
+
 public class Course {
     // variables
+    private String name;
     private String semester;
     private int grade;
     private boolean graded;
@@ -7,11 +10,13 @@ public class Course {
     private boolean passed;
 
     // constructors
-    public Course(String semester, int grade, boolean passed, boolean graded) {
+    public Course(String name, String semester, int grade, boolean passed, boolean graded) {
+        this.name = name;
         this.semester = semester;
         this.grade = grade;
         this.passed = passed;
         this.graded = graded;
+        createFile();
     }
 
     public Course() {
@@ -52,5 +57,7 @@ public class Course {
     }
 
     // methods
-
+    public void createFile(){
+        File courseFile = new File(this.name + ".csv");
+    } 
 }
