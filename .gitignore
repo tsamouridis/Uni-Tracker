@@ -43,4 +43,9 @@ hs_err_pid*
 .history
 .ionide
 
+# csv Files
+*.csv
+!settings.csv
+!courseNum.csv
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,java
