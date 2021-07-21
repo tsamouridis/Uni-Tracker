@@ -3,7 +3,7 @@ public class Semester {
     private int numberOfCourses;
     Course[] courses;
     Course[] gradedCourses;
-    int semesterGrades[];
+    float semesterGrades[];
     private Statistics stats;
     
     // construcors
@@ -11,6 +11,10 @@ public class Semester {
         this.serialNumber = serialNumber;
         this.numberOfCourses = numberOfCourses;
         this.courses = new Course[numberOfCourses];
+        this.semesterGrades = new float[numberOfCourses];
+        for(int i=0 ; i<this.numberOfCourses ; i++){
+            courses[i] = new Course("Course " + (i+1), serialNumber);
+        }
         createStats();
     }
 
@@ -34,12 +38,18 @@ public class Semester {
     }
 
     public void setSemesterGrades(){
-        int semesterGrades[] = new int[numberOfCourses];
+        float semesterGrades[] = new float[numberOfCourses];
         for(int i=0 ; i<numberOfCourses ; i++){
             semesterGrades[i] = courses[i].getGrade();
         }
     } 
 
+    public Statistics getStats(){
+        createStats();
+        return this.stats;
+    }
+
+    // methods
     public void createStats(){
         int numOfGradedCourses = 0;
         int[] indexOfGradedCourses = new int[numberOfCourses];
@@ -61,6 +71,8 @@ public class Semester {
         for(int i=0 ; i<numOfGradedCourses ; i++){
             semesterGrades[i] = courses[indexOfGradedCourses[i]].getGrade();
         }
-        stats = new Statistics(semesterGrades);
+        if(numOfGradedCourses != 0){
+            stats = new Statistics(semesterGrades, numOfGradedCourses);
+        }
     }
 }
