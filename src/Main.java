@@ -1,5 +1,7 @@
 public class Main {
     public static void main(String[] args) {
+        new Gui();
+    
         // Semester first = new Semester(1, 5);
 
         // System.out.println("___________________SEMESTER 1________________");
