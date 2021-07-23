@@ -18,6 +18,12 @@ public class Semester {
         createStats();
     }
 
+    public Semester() {
+        this.serialNumber = -1;
+        this.numberOfCourses = 0;
+        createStats();
+    }
+
     // getters and setters
     public int getSerialNumber() {
         return serialNumber;
