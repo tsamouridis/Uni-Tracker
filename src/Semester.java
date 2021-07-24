@@ -25,6 +25,14 @@ public class Semester {
     }
 
     // getters and setters
+    public Course[] getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Course[] courses) {
+        this.courses = courses;
+    }
+
     public int getSerialNumber() {
         return serialNumber;
     }
@@ -56,6 +64,61 @@ public class Semester {
     }
 
     // methods
+    public void addCourse(){
+        this.numberOfCourses ++;
+        Course newCourseArray[] = new Course[numberOfCourses];
+        for(int i=0 ; i<numberOfCourses-1 ; i++){
+            newCourseArray[i] = new Course(courses[i].getName(), courses[i].getSemester(), courses[i].getGrade(), courses[i].isPassed(), courses[i].isGraded(), false);
+        }
+        newCourseArray[numberOfCourses-1] = new Course();
+        this.courses = newCourseArray;
+    }
+
+
+    public void addCourse(String name, int semester, float grade, boolean passed, boolean graded){
+        this.numberOfCourses ++;
+        Course newCourseArray[] = new Course[numberOfCourses];
+        for(int i=0 ; i<numberOfCourses-1 ; i++){
+            newCourseArray[i] = new Course(courses[i].getName(), courses[i].getSemester(), courses[i].getGrade(), courses[i].isPassed(), courses[i].isGraded(), false);
+        }
+        newCourseArray[numberOfCourses-1] = new Course(name, semester, grade, passed, graded);
+        this.courses = newCourseArray;
+    }
+
+    public void addCourse(String name, int semester, float grade){
+        this.numberOfCourses ++;
+        Course newCourseArray[] = new Course[numberOfCourses];
+        for(int i=0 ; i<numberOfCourses-1 ; i++){
+            newCourseArray[i] = new Course(courses[i].getName(), courses[i].getSemester(), courses[i].getGrade(), courses[i].isPassed(), courses[i].isGraded(), false);
+        }
+        boolean passed, graded;
+        if (grade == -1){
+            passed = false;
+            graded = false;
+        }
+        else if(grade >=5){
+            passed = true;
+            graded = true;
+        }
+        else{
+            passed = false;
+            graded = true; 
+        }
+    
+        newCourseArray[numberOfCourses-1] = new Course(name, semester, grade, passed, graded);
+        this.courses = newCourseArray;
+    }
+
+    public void addCourse(String name, int semester){
+        this.numberOfCourses ++;
+        Course newCourseArray[] = new Course[numberOfCourses];
+        for(int i=0 ; i<numberOfCourses-1 ; i++){
+            newCourseArray[i] = new Course(courses[i].getName(), courses[i].getSemester(), courses[i].getGrade(), courses[i].isPassed(), courses[i].isGraded(), false);
+        }
+        newCourseArray[numberOfCourses-1] = new Course(name, semester, -1, false, false);
+        this.courses = newCourseArray;
+    }
+
     public void createStats(){
         int numOfGradedCourses = 0;
         int[] indexOfGradedCourses = new int[numberOfCourses];
