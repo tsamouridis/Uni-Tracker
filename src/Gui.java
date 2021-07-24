@@ -1,4 +1,6 @@
 import java.awt.*;
+
+import javax.security.auth.callback.TextOutputCallback;
 import javax.swing.*;  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,22 +15,23 @@ public class Gui {
     Settings s;
 
     JFrame f2;
-    JPanel p2, p3;
+    JPanel pCenter, pWest, pTop, pEast, pCenter_inSemester;
     JMenu menu;
     JMenuBar mb;
     JMenuItem i1, i2;
     JButton[] b_semesters;
     JLabel[] l_semesters;
-
+    JLabel l_title;
+    JButton b_back, b_addCourse, b_deleteCourse;
     int numOfSemesters;
-
+    String newCourse_grade;
+    String newCourse_name;
 
 
     Gui(){
         s = new Settings();
 
-
-        // * frame 1 ///////////////////////////////////////////////////////////////////////////////////////////////////
+        // f1
         f1 = new JFrame("Uni-Tracker");
         f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f1.setLayout(new GridBagLayout());
@@ -36,17 +39,18 @@ public class Gui {
         ImageIcon img = new ImageIcon("icon2.png");
         f1.setIconImage(img.getImage());
 
-
+        // f2
         f2 = new JFrame("Uni-Tracker");
         f2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f2.setLayout(new BorderLayout());
-       
         f2.setIconImage(img.getImage());
+        f2.setSize(700, 500);
+
+        // * components of frame 1 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         //panel
         p1 = new JPanel();
         p1.setLayout(new GridBagLayout());
-        // p1.setBackground(Color.LIGHT_GRAY);
 
         // GridBagContraints used when components are added
         GridBagConstraints gbc = new GridBagConstraints();
@@ -147,8 +151,7 @@ public class Gui {
         f1.add(p1, gbc);
         f1.setVisible(true);
 
-        
-
+        // actionListeners
         b_confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -182,7 +185,26 @@ public class Gui {
             }   
         });
 
-        // * frame 2 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // * components of frame 2 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        // panels
+        pCenter = new JPanel();
+        pCenter.setLayout(new GridBagLayout());
+
+        pWest = new JPanel();
+        pWest.setLayout(new GridBagLayout());
+        pWest.setBackground(Color.BLUE);
+
+        pTop = new JPanel();
+        pTop.setLayout(new GridBagLayout());
+        pTop.setBackground(Color.BLUE);
+
+        pEast = new JPanel();
+        pEast.setLayout(new GridBagLayout());
+        pEast.setBackground(Color.BLUE);
+
+
+        // menuBer
         mb = new JMenuBar();  
         menu = new JMenu();
         i1=new JMenuItem("Item 1");
@@ -192,78 +214,199 @@ public class Gui {
         JMenu submenu=new JMenu("Sub Menu"); 
         menu.add(submenu);  
         mb.add(menu);  
-        f2.setJMenuBar(mb);
+        f2.setJMenuBar(mb);        
 
-        f2.setSize(600, 500);
-        
+        // l_title
+        String name = s.getSettings()[1];
+        String university = s.getSettings()[2];
+        String department = s.getSettings()[3];
+        String title = "<html><center><b><h2>" + university + "</b><br>" + department + "</h2></center></html>";
+        l_title = new JLabel(title);
+        l_title.setForeground(Color.WHITE);
+        pTop.add(l_title);
 
+        // buttons and labels for the main menu
         numOfSemesters = Integer.parseInt(s.getSettings()[4]) * 2;
         Semester semArray[] = new Semester[numOfSemesters];
-
         for(int i=0 ; i<numOfSemesters ; i++){
             semArray[i] = new Semester();
             semArray[i].setSerialNumber(i);
         }
-
-        p2 = new JPanel();
-        p2.setLayout(new GridBagLayout());
-
-        p3 = new JPanel();
-        p3.setLayout(new GridBagLayout());
-        p3.setBackground(Color.BLACK);
-
-
         b_semesters = new JButton[numOfSemesters];
-        
         gbc.insets = new Insets(10, 10, 10, 10);
-
+        int year = 1;
         for(int i=0 ; i<numOfSemesters ; i++){
             String text = "Semester " + (i+1);
-            text = "<html><h3><b>" + text + "</b></h3></html>";
+            text = "<html><h4><b>" + text + "</b></h4></html>";
             b_semesters[i] = new JButton(text);
             if(i%2 == 0){
+                JLabel lab = new JLabel("Year " + year);
+                year++;
                 gbc.ipadx = 40;
                 gbc.ipady = 5;
                 gbc.gridx = 0;
                 gbc.gridy = i;
                 gbc.gridwidth = 1;
+                pCenter.add(lab, gbc);
+                gbc.ipadx = 40;
+                gbc.ipady = 5;
+                gbc.gridx = 1;
+                gbc.gridy = i;
+                gbc.gridwidth = 1;
             }
             else{
-                gbc.gridx = 1;
+                gbc.gridx = 2;
                 gbc.gridy = i-1;
                 gbc.gridwidth = 1;
             } 
-            p2.add(b_semesters[i], gbc);
+            pCenter.add(b_semesters[i], gbc);
         }
 
-
-        // for(int i=0 ; i<(int)numOfSemesters/2 ; i++){
-        //     b_semesters[i] = new JButton("Semester " + (i+1));
-        //     gbc.gridx = i;
-        //     gbc.gridy = 0;
-        //     gbc.gridwidth = 1; 
-        //     p2.add(b_semesters[i], gbc);
-        // }
-        
-        // int j = 0;
-        //     for(int i=(int)numOfSemesters/2 + 1 ; i<numOfSemesters ; i++){
-        //     b_semesters[i] = new JButton("Semester " + (i+1));
-        //     gbc.gridx = j;
-        //     gbc.gridy = 0;
-        //     j++;
-        //     gbc.gridwidth = 1; 
-        //     p2.add(b_semesters[i], gbc);
-        // }
-
-        f2.add(p2, BorderLayout.CENTER);
-        JButton p = new JButton("test");
-        p3.add(p);
-        f2.add(p3, BorderLayout.WEST);   
+        // add panels
+        f2.add(pCenter, BorderLayout.CENTER);
+        pWest.setBorder( BorderFactory.createEmptyBorder(0,0,0,100) );
+        pEast.setBorder( BorderFactory.createEmptyBorder(0,0,0,100) );
+        f2.add(pWest, BorderLayout.WEST);   
+        f2.add(pEast, BorderLayout.EAST);   
+        f2.add(pTop, BorderLayout.NORTH);   
 
         if(s.getSettings()[0].equals("false")){
             f1.setVisible(false);
             f1.dispose();
             f2.setVisible(true);
+        }
+
+        for(int i=0 ; i<numOfSemesters ; i++){
+            b_semesters[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton pressed = (JButton) e.getSource();
+                    // System.out.println(pressed.getText());
+                    int k = Character.getNumericValue(pressed.getText().charAt(22));
+                    pCenter.setVisible(false);
+                    gbc.fill = GridBagConstraints.NONE; 
+                    gbc.ipadx = 0;
+                    gbc.ipady = 0;
+                   
+                    pCenter_inSemester = new JPanel();
+                    pCenter_inSemester.setLayout(new GridBagLayout());
+                    pCenter_inSemester.setBackground(Color.BLACK);
+
+                    b_back = new JButton("Back to main menu");
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
+                    gbc.gridwidth = 2;
+                    pCenter_inSemester.add(b_back, gbc);
+
+                    JLabel[] l_courses = new JLabel[semArray[k].getNumberOfCourses()]; 
+                    JLabel[] l_grades = new JLabel[semArray[k].getNumberOfCourses()];
+                    int j; 
+                    for(j=0 ; j<semArray[k].getNumberOfCourses() ; j++){
+                        l_courses[j] = new JLabel(semArray[k].getCourses()[j].getName());
+                        l_grades[j] = new JLabel(Float.toString(semArray[k].getCourses()[j].getGrade()));
+                        gbc.gridx = 0;
+                        gbc.gridy = j+1;
+                        pCenter_inSemester.add(l_courses[j], gbc);
+                        gbc.gridx = 1;
+                        gbc.gridy = j+1;
+                        pCenter_inSemester.add(l_grades[j], gbc);
+                    }
+
+                    b_addCourse = new JButton("Add a new course to this semester");
+                    gbc.gridwidth = 1;
+                    gbc.gridx = 0;
+                    gbc.gridy = j+1;
+                    pCenter_inSemester.add(b_addCourse, gbc);
+
+                    b_deleteCourse = new JButton("Delete a course from this semester");
+                    gbc.gridwidth = 1;
+                    gbc.gridx = 1;
+                    gbc.gridy = j+1;
+                    pCenter_inSemester.add(b_deleteCourse, gbc);
+
+
+                    f2.add(pCenter_inSemester, BorderLayout.CENTER);
+
+                    b_back.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            pCenter_inSemester.setVisible(false);
+                            pCenter_inSemester.removeAll();
+                            pCenter.setVisible(true);
+                        }   
+                    });
+
+                    b_addCourse.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            newCourse_grade = "-1";
+                            newCourse_name = "";
+                            JFrame optionPane = new JFrame("Add a new course");
+                            optionPane.setLayout(new GridBagLayout());
+
+                            optionPane.setSize(700, 300);
+                            optionPane.setResizable(false);
+                            JLabel l_newCourseName = new JLabel("Name of the Course: ");
+                            JLabel l_newCourseGrade = new JLabel("Grade of the Course: ");
+                            JTextField t_newCourseName= new JTextField();
+                            JTextField t_newCourseGrade= new JTextField();
+
+                            JPanel p = new JPanel();
+                            p.setLayout(new GridBagLayout());
+                            gbc.fill = GridBagConstraints.HORIZONTAL;
+                            gbc.ipadx = 200;
+                            gbc.ipady = 20;
+
+                            gbc.gridx = 0;
+                            gbc.gridy = 0;
+                            p.add(l_newCourseName, gbc);
+                            gbc.gridx = 1;
+                            gbc.gridy = 0;
+                            p.add(t_newCourseName, gbc);
+                            gbc.gridx = 0;
+                            gbc.gridy = 1;
+                            p.add(l_newCourseGrade, gbc);
+                            gbc.gridx = 1;
+                            gbc.gridy = 1;
+                            p.add(t_newCourseGrade, gbc);
+
+                            JButton b_ok = new JButton("Confirm");
+                            JButton b_cancel = new JButton("Cancel");
+                            gbc.gridx = 0;
+                            gbc.gridy = 2;
+                            p.add(b_ok, gbc);
+                            gbc.gridx = 1;
+                            gbc.gridy = 2;
+                            p.add(b_cancel, gbc);
+
+                            optionPane.add(p);
+                            optionPane.setVisible(true);
+                            
+                            b_ok.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    //save data
+                                    newCourse_name = t_newCourseName.getText();
+                                    newCourse_grade = t_newCourseGrade.getText();
+                                    semArray[k].addCourse(newCourse_name, semArray[k].getSerialNumber(), Float.parseFloat(newCourse_grade));
+
+                                    optionPane.setVisible(false);
+                                    optionPane.dispose();
+                                }   
+                            });
+
+                            b_cancel.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    optionPane.setVisible(false);
+                                    optionPane.dispose();
+                                }   
+                            });
+                        }   
+                    });
+                } 
+            });
+
         }
     }
 }
