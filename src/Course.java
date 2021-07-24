@@ -26,13 +26,21 @@ public class Course {
         createFile();
     }
 
+    public Course(String name, int semester, float grade, boolean passed, boolean graded, boolean createFile){
+        this.name = name;
+        this.semester = semester;
+        this.grade = grade;
+        this.passed = passed;
+        this.graded = graded;
+        System.out.println("id: " + getId());
+    }
+
     public Course(String name, int semester) {
         this.name = name;
         this.semester = semester;
         this.grade = -1;    // -1 means no grade available
         this.passed = false;
         this.graded = false;
-        setId();
         System.out.println("id: " + getId());
         createFile();
     }
@@ -140,16 +148,17 @@ public class Course {
         try {
             File myObj = new File(id + ".csv");
             if (myObj.createNewFile()) {
-              System.out.println("File created: " + myObj.getName());
+                write_csv();
+                System.out.println("File created: " + myObj.getName());
             } 
             else {
-              System.out.println("File already exists.");
+                System.out.println("File already exists.");
             }
-          } 
-          catch (IOException e) {
+        } 
+        catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-          }
+        }
     } 
 
     public void read_csv(){ 
@@ -199,7 +208,8 @@ public class Course {
             sb.append(this.passed);
             sb.append('\n');
 
-            writer.write(sb.toString());   
+            writer.write(sb.toString());
+            writer.close();
           } 
           catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
