@@ -1,6 +1,4 @@
 import java.awt.*;
-
-import javax.security.auth.callback.TextOutputCallback;
 import javax.swing.*;  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,11 +50,11 @@ public class Gui {
         p1 = new JPanel();
         p1.setLayout(new GridBagLayout());
 
-        // GridBagContraints used when components are added
+        // GridBagConstraints used when components are added
         GridBagConstraints gbc = new GridBagConstraints();
 
         // labels
-        l_welMessage = new JLabel("<html><b><center><h3>Before you can use this App, you first have to provide the following informations:</h3></center></b><html>");;
+        l_welMessage = new JLabel("<html><b><center><h3>Before you can use this App, you first have to provide the following information:</h3></center></b><html>");;
         l_name = new JLabel("Student's name and surname: ");
         l_name.setToolTipText("Enter your name as you want it to be displayed in the App");
         l_university = new JLabel("University: ");
@@ -66,12 +64,12 @@ public class Gui {
         l_years = new JLabel("Studying years: ");
         l_years.setToolTipText("Enter your Department's length of curriculum");
 
-        // textfields
+        // textFields
         t_university = new JTextField(); 
         t_name = new JTextField(); 
         t_department = new JTextField();
 
-        // combobox
+        // comboBox
         String years_arr[]={"1", "2", "3", "4", "5"}; 
         years = new JComboBox<>(years_arr);    
 
@@ -134,13 +132,13 @@ public class Gui {
         gbc.gridwidth = 1; 
         p1.add(l_years, gbc);
 
-        // add years combobox
+        // add years comboBox
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.gridwidth = 1; 
         p1.add(years, gbc);
 
-        // add years combobox
+        // add years comboBox
         gbc.insets = new Insets(20,60,20,60);
         gbc.gridx = 0;
         gbc.gridy = 5;
@@ -211,8 +209,8 @@ public class Gui {
         i2=new JMenuItem("Item 2");
         menu.add(i1);
         menu.add(i2);
-        JMenu submenu=new JMenu("Sub Menu"); 
-        menu.add(submenu);  
+        JMenu subMenu=new JMenu("Sub Menu"); 
+        menu.add(subMenu);  
         mb.add(menu);  
         f2.setJMenuBar(mb);        
 
@@ -220,7 +218,7 @@ public class Gui {
         String name = s.getSettings()[1];
         String university = s.getSettings()[2];
         String department = s.getSettings()[3];
-        String title = "<html><center><b><h2>" + university + "</b><br>" + department + "</h2></center></html>";
+        String title = "<html><center><b><h2>" + university + "</b><br>" + department + "<br>"+ name + "</h2></center></html>";
         l_title = new JLabel(title);
         l_title.setForeground(Color.WHITE);
         pTop.add(l_title);
