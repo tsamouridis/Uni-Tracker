@@ -11,6 +11,7 @@ public class Gui {
     JButton b_confirm;
     JPanel p1;
     Settings s;
+    GridBagConstraints gbc;
 
     JFrame f2;
     JPanel pCenter, pWest, pTop, pEast, pCenter_inSemester;
@@ -25,8 +26,7 @@ public class Gui {
     String newCourse_grade;
     String newCourse_name;
 
-
-    Gui(){
+    Gui(Semester[] semArray){
         s = new Settings();
 
         // f1
@@ -51,7 +51,7 @@ public class Gui {
         p1.setLayout(new GridBagLayout());
 
         // GridBagConstraints used when components are added
-        GridBagConstraints gbc = new GridBagConstraints();
+        gbc = new GridBagConstraints();
 
         // labels
         l_welMessage = new JLabel("<html><b><center><h3>Before you can use this App, you first have to provide the following information:</h3></center></b><html>");;
@@ -225,11 +225,11 @@ public class Gui {
 
         // buttons and labels for the main menu
         numOfSemesters = Integer.parseInt(s.getSettings()[4]) * 2;
-        Semester semArray[] = new Semester[numOfSemesters];
-        for(int i=0 ; i<numOfSemesters ; i++){
-            semArray[i] = new Semester();
-            semArray[i].setSerialNumber(i);
-        }
+        // Semester semArray[] = new Semester[numOfSemesters];
+        // for(int i=0 ; i<numOfSemesters ; i++){
+        //     semArray[i] = new Semester();
+        //     semArray[i].setSerialNumber(i);
+        // }
         b_semesters = new JButton[numOfSemesters];
         gbc.insets = new Insets(10, 10, 10, 10);
         int year = 1;
@@ -280,7 +280,7 @@ public class Gui {
                 public void actionPerformed(ActionEvent e) {
                     JButton pressed = (JButton) e.getSource();
                     // System.out.println(pressed.getText());
-                    int k = Character.getNumericValue(pressed.getText().charAt(22));
+                    int k = Character.getNumericValue(pressed.getText().charAt(22)) - 1;
                     pCenter.setVisible(false);
                     gbc.fill = GridBagConstraints.NONE; 
                     gbc.ipadx = 0;
@@ -288,7 +288,7 @@ public class Gui {
                    
                     pCenter_inSemester = new JPanel();
                     pCenter_inSemester.setLayout(new GridBagLayout());
-                    pCenter_inSemester.setBackground(Color.BLACK);
+                    pCenter_inSemester.setBackground(Color.WHITE);
 
                     b_back = new JButton("Back to main menu");
                     gbc.gridx = 0;
@@ -299,6 +299,12 @@ public class Gui {
                     JLabel[] l_courses = new JLabel[semArray[k].getNumberOfCourses()]; 
                     JLabel[] l_grades = new JLabel[semArray[k].getNumberOfCourses()];
                     int j; 
+
+                    // for(j=0 ; j<semArray[k].getNumberOfCourses() ; j++){
+                    //     semArray[k].readCourse();
+                    // }
+
+                    gbc.gridwidth = 1;
                     for(j=0 ; j<semArray[k].getNumberOfCourses() ; j++){
                         l_courses[j] = new JLabel(semArray[k].getCourses()[j].getName());
                         l_grades[j] = new JLabel(Float.toString(semArray[k].getCourses()[j].getGrade()));
@@ -330,6 +336,7 @@ public class Gui {
                         public void actionPerformed(ActionEvent e) {
                             pCenter_inSemester.setVisible(false);
                             pCenter_inSemester.removeAll();
+                            pCenter.setEnabled(true);
                             pCenter.setVisible(true);
                         }   
                     });
@@ -386,7 +393,7 @@ public class Gui {
                                     //save data
                                     newCourse_name = t_newCourseName.getText();
                                     newCourse_grade = t_newCourseGrade.getText();
-                                    semArray[k].addCourse(newCourse_name, semArray[k].getSerialNumber(), Float.parseFloat(newCourse_grade));
+                                    semArray[k].addCourse(newCourse_name, semArray[k].getSerialNumber()+1, Float.parseFloat(newCourse_grade));
 
                                     optionPane.setVisible(false);
                                     optionPane.dispose();
@@ -406,5 +413,42 @@ public class Gui {
             });
 
         }
+    }
+
+    public void createPCenter(){
+        pCenter = new JPanel();
+        pCenter.setLayout(new GridBagLayout());
+        b_semesters = new JButton[numOfSemesters];
+        gbc.insets = new Insets(10, 10, 10, 10);
+        int year = 1;
+        for(int i=0 ; i<numOfSemesters ; i++){
+            String text = "Semester " + (i+1);
+            text = "<html><h4><b>" + text + "</b></h4></html>";
+            b_semesters[i] = new JButton(text);
+            if(i%2 == 0){
+                JLabel lab = new JLabel("Year " + year);
+                year++;
+                gbc.ipadx = 40;
+                gbc.ipady = 5;
+                gbc.gridx = 0;
+                gbc.gridy = i;
+                gbc.gridwidth = 1;
+                pCenter.add(lab, gbc);
+                gbc.ipadx = 40;
+                gbc.ipady = 5;
+                gbc.gridx = 1;
+                gbc.gridy = i;
+                gbc.gridwidth = 1;
+            }
+            else{
+                gbc.gridx = 2;
+                gbc.gridy = i-1;
+                gbc.gridwidth = 1;
+            } 
+            pCenter.add(b_semesters[i], gbc);
+        }
+
+        // add panels
+        f2.add(pCenter, BorderLayout.CENTER);
     }
 }

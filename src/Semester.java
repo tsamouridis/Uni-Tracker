@@ -1,3 +1,7 @@
+import java.io.BufferedReader;  
+import java.io.FileReader; 
+import java.io.IOException;  
+
 public class Semester {
     private int serialNumber;
     private int numberOfCourses;
@@ -6,7 +10,7 @@ public class Semester {
     float semesterGrades[];
     private Statistics stats;
     
-    // construcors
+    // constructors
     public Semester(int serialNumber, int numberOfCourses) {
         this.serialNumber = serialNumber;
         this.numberOfCourses = numberOfCourses;
@@ -85,6 +89,28 @@ public class Semester {
         this.courses = newCourseArray;
     }
 
+    public void addCourse(String name, int semester, float grade, boolean passed, boolean graded, String id, boolean createFile){
+        this.numberOfCourses ++;
+        Course newCourseArray[] = new Course[numberOfCourses];
+        for(int i=0 ; i<numberOfCourses-1 ; i++){
+            newCourseArray[i] = new Course(courses[i].getName(), courses[i].getSemester(), courses[i].getGrade(), courses[i].isPassed(), courses[i].isGraded(), false);
+            newCourseArray[i].setId(courses[i].getId());
+        }
+        newCourseArray[numberOfCourses-1] = new Course(name, semester, grade, passed, graded, id, false);
+        this.courses = newCourseArray;
+    }
+
+    public void addCourse(String name, int semester, float grade, boolean passed, boolean graded, boolean createFile){
+        this.numberOfCourses ++;
+        Course newCourseArray[] = new Course[numberOfCourses];
+        for(int i=0 ; i<numberOfCourses-1 ; i++){
+            newCourseArray[i] = new Course(courses[i].getName(), courses[i].getSemester(), courses[i].getGrade(), courses[i].isPassed(), courses[i].isGraded(), false);
+            newCourseArray[i].setId(courses[i].getId());
+        }
+        newCourseArray[numberOfCourses-1] = new Course(name, semester, grade, passed, graded, false);
+        this.courses = newCourseArray;
+    }
+
     public void addCourse(String name, int semester, float grade){
         this.numberOfCourses ++;
         Course newCourseArray[] = new Course[numberOfCourses];
@@ -143,5 +169,21 @@ public class Semester {
         if(numOfGradedCourses != 0){
             stats = new Statistics(semesterGrades, numOfGradedCourses);
         }
+    }
+
+    public int getCourseNum(){
+        int courseNum = -1;
+        try{
+            BufferedReader csvReader = new BufferedReader(new FileReader("courseNum.csv"));
+            String row;
+            row = csvReader.readLine();
+            String[] data = row.split(",");
+            courseNum = Integer.parseInt(data[1]);
+            csvReader.close();
+        }
+        catch (IOException e){  
+            e.printStackTrace();  
+        }
+        return courseNum; 
     }
 }
