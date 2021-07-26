@@ -21,9 +21,17 @@ public class Course {
         this.grade = grade;
         this.passed = passed;
         this.graded = graded;
-        setId();
-        System.out.println("id: " + getId());
+        setId(true);
         createFile();
+    }
+
+    public Course(String name, int semester, float grade, boolean passed, boolean graded, String id, boolean createFile){
+        this.name = name;
+        this.semester = semester;
+        this.grade = grade;
+        this.passed = passed;
+        this.graded = graded;
+        this.id = id;
     }
 
     public Course(String name, int semester, float grade, boolean passed, boolean graded, boolean createFile){
@@ -32,7 +40,6 @@ public class Course {
         this.grade = grade;
         this.passed = passed;
         this.graded = graded;
-        System.out.println("id: " + getId());
     }
 
     public Course(String name, int semester) {
@@ -41,7 +48,6 @@ public class Course {
         this.grade = -1;    // -1 means no grade available
         this.passed = false;
         this.graded = false;
-        System.out.println("id: " + getId());
         createFile();
     }
 
@@ -50,11 +56,17 @@ public class Course {
     }
 
     // getters and setters
-    public void setId() {
-        int courseNum = getcourseNum();
-        courseNum++;
-        id = "C_" + courseNum;
-        saveCourseNum(courseNum);
+    public void setId(boolean editCourseNum) {
+        int courseNum = getCourseNum();
+        if(editCourseNum){
+            courseNum++;
+            saveCourseNum(courseNum);
+        }
+        this.id = "C_" + (courseNum-1);
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getId() {
@@ -112,7 +124,7 @@ public class Course {
     }
 
     // methods
-    public int getcourseNum(){
+    public static int getCourseNum(){
         int courseNum = -1;
         try{
             BufferedReader csvReader = new BufferedReader(new FileReader("courseNum.csv"));
@@ -175,6 +187,40 @@ public class Course {
                     case 3:     this.graded = Boolean.parseBoolean(data[1]);
                     case 4:     this.passed = Boolean.parseBoolean(data[1]);
                 }
+            }
+            csvReader.close();
+        }
+        catch (IOException e){  
+            e.printStackTrace();  
+        }   
+    }
+
+    public void read_csv(String id){ 
+        this.id = id;
+        try{
+            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            String row;
+            int count = 0;
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+                switch(count){
+                    case 0:
+                        this.name = data[1];
+                        break;
+                    case 1:     
+                        this.semester = Integer.parseInt(data[1]);
+                        break;
+                    case 2:
+                        this.grade = Float.parseFloat(data[1]);
+                        break;
+                    case 3:
+                        this.graded = Boolean.parseBoolean(data[1]);
+                        break;
+                    case 4:
+                        this.passed = Boolean.parseBoolean(data[1]);
+                        break;
+                }
+                count++;    
             }
             csvReader.close();
         }
