@@ -1,43 +1,69 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.BufferedReader;  
+import java.io.FileReader; 
+import java.io.IOException;  
+import java.io.PrintWriter;
+
 public class Main {
     public static void main(String[] args) {
-        new Gui();
+        Settings s = new Settings();
+        int numOfSemesters = Integer.parseInt(s.getSettings()[4]) * 2;  // set numOfSemesters
+        Semester semArray[] = new Semester[numOfSemesters];             // create array for semesters
+        for(int i=0 ; i<numOfSemesters ; i++){                          //initialize the semArray
+            semArray[i] = new Semester();
+            semArray[i].setSerialNumber(i);
+        }
+        int courseNum = Course.getCourseNum();                          //read number of courses
+        
+        String data[] = new String[5];
+        for(int i=0 ; i<courseNum ; i++){
+            String id = "C_"+i;
+// System.out.println(id);
+            data = read_courseData(id);
+            int belongsToSem = Integer.parseInt(data[1]); 
+            semArray[belongsToSem-1].addCourse(data[0], Integer.parseInt(data[1]),
+                                                 Float.parseFloat(data[2]), Boolean.parseBoolean(data[3]), Boolean.parseBoolean(data[4]), id, false);
+// System.out.println(semArray[belongsToSem-1].getCourses()[0].getId());
+        }
+
+        new Gui(semArray);
     
-        // Semester first = new Semester(1, 5);
-
-        // System.out.println("___________________SEMESTER 1________________");
-        // first.courses[0].setName("Java");
-        // first.courses[1].setName("C");
-        // first.courses[0].setGrade((float)9.5);
-        // first.courses[1].setGrade((float)9);
-        // first.courses[2].setGrade((float)8);
-        // first.courses[3].setGrade((float)6);
-
-        // System.out.println("Mean: " + first.getStats().getMean());
-        // System.out.println("Median: " + first.getStats().getMedian());
-        // System.out.println("Var: " + first.getStats().getVariance());
-        // System.out.println("Min: " + first.getStats().getMinimum());
-        // System.out.println("Max: " + first.getStats().getMaximum());
-        // System.out.println("std: " + first.getStats().getStd());
-        // System.out.println("Passed: " + first.getStats().getNumberOfPassedCourses());
-
-
-        // Semester second = new Semester(2, 5);
-
-        // System.out.println("___________________SEMESTER 2________________");
-        // second.courses[0].setName("Java");
-        // second.courses[1].setName("C++");
-        // second.courses[0].setGrade((float)9);
-        // second.courses[1].setGrade((float)9);
-        // second.courses[2].setGrade((float)9);
-        // second.courses[3].setGrade((float)5);
-        // second.courses[4].setGrade((float)3);
-
-        // System.out.println("Mean: " + second.getStats().getMean());
-        // System.out.println("Median: " + second.getStats().getMedian());
-        // System.out.println("Var: " + second.getStats().getVariance());
-        // System.out.println("Min: " + second.getStats().getMinimum());
-        // System.out.println("Max: " + second.getStats().getMaximum());
-        // System.out.println("std: " + second.getStats().getStd());
-        // System.out.println("Passed: " + second.getStats().getNumberOfPassedCourses());
     }
+
+    static String[] read_courseData(String id){ 
+        String[] data = new String[5];
+        try{
+            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            String row;
+            int count = 0;
+            while ((row = csvReader.readLine()) != null) {
+                String[] fileInfo = row.split(",");
+                switch(count){
+                    case 0:     
+                        data[0] = fileInfo[1];
+                        break;
+                    case 1:
+                        data[1] = fileInfo[1];
+                        break;
+                    case 2:   
+                        data[2] = fileInfo[1];
+                        break;
+                    case 3:
+                        data[3] = fileInfo[1];
+                        break;
+                    case 4:   
+                        data[4] = fileInfo[1];
+                        break;
+                }
+                count++;
+            }
+            csvReader.close();
+        }
+        catch (IOException e){  
+            e.printStackTrace();    
+        }
+        return data;
+    }
+
 }
