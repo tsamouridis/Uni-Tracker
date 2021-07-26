@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.*;
 
 public class Gui {
     JFrame f1;
@@ -15,6 +16,7 @@ public class Gui {
 
     JFrame f2;
     JPanel pCenter, pWest, pTop, pEast, pCenter_inSemester;
+    JTabbedPane tp;
     JMenu menu;
     JMenuBar mb;
     JMenuItem i1, i2;
@@ -25,6 +27,7 @@ public class Gui {
     int numOfSemesters;
     String newCourse_grade;
     String newCourse_name;
+    JLabel semesterMes;
 
     Gui(Semester[] semArray){
         s = new Settings();
@@ -186,20 +189,22 @@ public class Gui {
         // * components of frame 2 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // panels
+        tp = new JTabbedPane();
+
         pCenter = new JPanel();
         pCenter.setLayout(new GridBagLayout());
 
         pWest = new JPanel();
         pWest.setLayout(new GridBagLayout());
-        pWest.setBackground(Color.BLUE);
+        pWest.setBackground(Color.BLACK);
 
         pTop = new JPanel();
         pTop.setLayout(new GridBagLayout());
-        pTop.setBackground(Color.BLUE);
+        pTop.setBackground(Color.BLACK);
 
         pEast = new JPanel();
         pEast.setLayout(new GridBagLayout());
-        pEast.setBackground(Color.BLUE);
+        pEast.setBackground(Color.BLACK);
 
 
         // menuBer
@@ -261,12 +266,21 @@ public class Gui {
         }
 
         // add panels
-        f2.add(pCenter, BorderLayout.CENTER);
+        // f2.add(pCenter, BorderLayout.CENTER);
+        f2.add(tp, BorderLayout.CENTER);
+        tp.add(pCenter, "Main menu");
         pWest.setBorder( BorderFactory.createEmptyBorder(0,0,0,100) );
         pEast.setBorder( BorderFactory.createEmptyBorder(0,0,0,100) );
         f2.add(pWest, BorderLayout.WEST);   
         f2.add(pEast, BorderLayout.EAST);   
         f2.add(pTop, BorderLayout.NORTH);   
+
+
+        pCenter_inSemester = new JPanel();
+        pCenter_inSemester.setLayout(new GridBagLayout());
+        pCenter_inSemester.setBackground(Color.WHITE);
+        tp.add(pCenter_inSemester, "Semester Grades");
+
 
         if(s.getSettings()[0].equals("false")){
             f1.setVisible(false);
@@ -274,10 +288,27 @@ public class Gui {
             f2.setVisible(true);
         }
 
+
+        tp.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if(tp.getSelectedIndex() == 0){
+                    pCenter_inSemester.removeAll();
+                    pCenter_inSemester.setVisible(false);
+                }
+                else if(tp.getSelectedIndex() == 1){
+                    semesterMes = new JLabel("Please select a semester from the main menu to be displayed");
+                    pCenter_inSemester.add(semesterMes);    
+                }
+            }
+        });
+
+
         for(int i=0 ; i<numOfSemesters ; i++){
             b_semesters[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    tp.setSelectedIndex(1);
+                    semesterMes.setVisible(false);
                     JButton pressed = (JButton) e.getSource();
                     // System.out.println(pressed.getText());
                     int k = Character.getNumericValue(pressed.getText().charAt(22)) - 1;
@@ -285,10 +316,6 @@ public class Gui {
                     gbc.fill = GridBagConstraints.NONE; 
                     gbc.ipadx = 0;
                     gbc.ipady = 0;
-                   
-                    pCenter_inSemester = new JPanel();
-                    pCenter_inSemester.setLayout(new GridBagLayout());
-                    pCenter_inSemester.setBackground(Color.WHITE);
 
                     b_back = new JButton("Back to main menu");
                     gbc.gridx = 0;
@@ -323,19 +350,20 @@ public class Gui {
                     pCenter_inSemester.add(b_addCourse, gbc);
 
                     b_deleteCourse = new JButton("Delete a course from this semester");
+                    b_deleteCourse.setEnabled(false);
                     gbc.gridwidth = 1;
                     gbc.gridx = 1;
                     gbc.gridy = j+1;
                     pCenter_inSemester.add(b_deleteCourse, gbc);
 
 
-                    f2.add(pCenter_inSemester, BorderLayout.CENTER);
 
                     b_back.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            pCenter_inSemester.setVisible(false);
+                            tp.setSelectedIndex(0);
                             pCenter_inSemester.removeAll();
+                            pCenter_inSemester.setVisible(false);
                             pCenter.setEnabled(true);
                             pCenter.setVisible(true);
                         }   
@@ -413,7 +441,11 @@ public class Gui {
             });
 
         }
+
+        
     }
+
+
 
     public void createPCenter(){
         pCenter = new JPanel();
