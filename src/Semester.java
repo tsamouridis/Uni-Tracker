@@ -163,6 +163,7 @@ public class Semester {
         }
         gradedCourses = new Course[numOfGradedCourses];
 
+        semesterGrades = new float[numberOfCourses];
         for(int i=0 ; i<numOfGradedCourses ; i++){
             semesterGrades[i] = courses[indexOfGradedCourses[i]].getGrade();
         }

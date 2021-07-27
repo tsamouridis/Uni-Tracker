@@ -107,7 +107,12 @@ public class Statistics {
     }
 
     public void setStd(){
-        this.std = (float) Math.sqrt(this.variance);
+        if(this.variance < 0){
+            this.std = -1;
+        }
+        else{
+            this.std = (float) Math.sqrt(this.variance);
+        }
     }
 
     public void setMinimum(float[] array){
