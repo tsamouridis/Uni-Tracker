@@ -22,15 +22,15 @@ public class Gui {
     JMenu menu;
     JMenuBar mb;
     JMenuItem i1, i2;
-    JButton[] b_semesters;
+    JButton[] b_semesters, b_courses;
     JLabel[] l_semesters;
     JLabel l_title;
     JButton b_back, b_addCourse, b_showStats;
     // JButton b_deleteCourse;
     int numOfSemesters;
     String newCourse_grade;
-    String newCourse_name;
-    JLabel semesterMes, statsMes;
+    String newCourse_name, fileId, oldName;
+    JLabel semesterMes, statsMes, l_stats;
 
     Gui(Semester[] semArray){
         s = new Settings();
@@ -300,21 +300,19 @@ public class Gui {
                 if(tp.getSelectedIndex() == 0){
                     pCenter_inSemester.removeAll();
                     pCenter_inStats.removeAll();
-                    
-                    pCenter_inSemester.setVisible(false);
-                    pCenter_inStats.setVisible(false);
                 }
                 else if(tp.getSelectedIndex() == 1){
+                    pCenter_inStats.removeAll();
                     pCenter_inSemester.add(semesterMes, gbc);
-                    pCenter_inSemester.setVisible(true);
+                    semesterMes.setVisible(true);
                 }
-                else if(tp.getSelectedIndex() == 2){
-                    pCenter_inStats.add(statsMes, gbc);    
+                else if(tp.getSelectedIndex() == 2){ 
+                    pCenter_inSemester.removeAll();
+                    pCenter_inStats.add(statsMes, gbc); 
+                    statsMes.setVisible(true);
                 }
             }
         });
-
-
 
         for(int i=0 ; i<numOfSemesters ; i++){
             b_semesters[i].addActionListener(new ActionListener() {
@@ -337,7 +335,7 @@ public class Gui {
                     String semesterTitle = "<html><center><h2>Semester " + (k+1) + "</h2></center></html>";
                     JLabel l_SemesterTitle = new JLabel(semesterTitle); 
                     l_SemesterTitle.setForeground(Color.BLUE);
-                    JLabel[] l_courses = new JLabel[semArray[k].getNumberOfCourses()]; 
+                    b_courses = new JButton[semArray[k].getNumberOfCourses()]; 
                     JLabel[] l_grades = new JLabel[semArray[k].getNumberOfCourses()];
                     int j = 0; 
 
@@ -362,15 +360,96 @@ public class Gui {
                     }
                     else{
                         gbc.gridwidth = 1;
+                        gbc.ipady = 0;
+                        gbc.ipadx = 0;
                         for(j=0 ; j<semArray[k].getNumberOfCourses() ; j++){
-                            l_courses[j] = new JLabel(semArray[k].getCourses()[j].getName());
+                            b_courses[j] = new JButton(semArray[k].getCourses()[j].getName());
+                            b_courses[j].setName(semArray[k].getCourses()[j].getId());
+                            b_courses[j].setBackground(Color.BLACK);
+                            b_courses[j].setForeground(Color.WHITE);
                             l_grades[j] = new JLabel(Float.toString(semArray[k].getCourses()[j].getGrade()));
                             gbc.gridx = 0;
                             gbc.gridy = j+2;
-                            pCenter_inSemester.add(l_courses[j], gbc);
+                            pCenter_inSemester.add(b_courses[j], gbc);
                             gbc.gridx = 1;
                             gbc.gridy = j+2;
                             pCenter_inSemester.add(l_grades[j], gbc);
+                            b_courses[j].addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    JButton pressed = (JButton) e.getSource();
+                                    oldName = pressed.getText();
+                                    fileId = pressed.getName();
+                                    JFrame optionPane = new JFrame("Edit Course info");
+                                    optionPane.setLayout(new GridBagLayout());
+
+                                    optionPane.setSize(700, 300);
+                                    optionPane.setResizable(false);
+                                    JLabel l_newCourseName = new JLabel("Name of the Course: ");
+                                    JLabel l_newCourseGrade = new JLabel("Grade of the Course: ");
+                                    JTextField t_newCourseName= new JTextField(oldName);
+                                    JTextField t_newCourseGrade= new JTextField();
+
+                                    JPanel p = new JPanel();
+                                    p.setLayout(new GridBagLayout());
+                                    gbc.fill = GridBagConstraints.HORIZONTAL;
+                                    gbc.ipadx = 200;
+                                    gbc.ipady = 20;
+
+                                    gbc.gridx = 0;
+                                    gbc.gridy = 0;
+                                    p.add(l_newCourseName, gbc);
+                                    gbc.gridx = 1;
+                                    gbc.gridy = 0;
+                                    p.add(t_newCourseName, gbc);
+                                    gbc.gridx = 0;
+                                    gbc.gridy = 1;
+                                    p.add(l_newCourseGrade, gbc);
+                                    gbc.gridx = 1;
+                                    gbc.gridy = 1;
+                                    p.add(t_newCourseGrade, gbc);
+
+                                    JButton b_ok = new JButton("Confirm");
+                                    JButton b_cancel = new JButton("Cancel");
+                                    gbc.gridx = 0;
+                                    gbc.gridy = 2;
+                                    p.add(b_ok, gbc);
+                                    gbc.gridx = 1;
+                                    gbc.gridy = 2;
+                                    p.add(b_cancel, gbc);
+
+                                    optionPane.add(p);
+                                    optionPane.setVisible(true);
+                                    
+                                    b_ok.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            //save data
+                                            newCourse_name = t_newCourseName.getText();
+                                            newCourse_grade = t_newCourseGrade.getText();
+                                            
+                                            // open file and edit 
+                                            Course.edit_csv(fileId, newCourse_name, newCourse_grade);
+
+                                            optionPane.setVisible(false);
+                                            optionPane.dispose();
+                                            pCenter_inSemester.removeAll();
+                                            b_semesters[k].doClick();
+
+// ! change button and grade text
+
+                                        }   
+                                    });
+
+                                    b_cancel.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            optionPane.setVisible(false);
+                                            optionPane.dispose();
+                                        }   
+                                    });
+                                }   
+                            });
                         }    
                     }
                     
@@ -385,6 +464,10 @@ public class Gui {
                     gbc.gridx = 1;
                     gbc.gridy = j+2;
                     pCenter_inSemester.add(b_showStats, gbc);
+
+                    if(semArray[k].getNumberOfCourses() == 0){
+                        b_showStats.setEnabled(false);
+                    }
 
                     // ! create b_delete course
                     // b_deleteCourse = new JButton("Delete a course from this semester");
@@ -408,24 +491,40 @@ public class Gui {
                     b_showStats.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            statsMes.setVisible(false);
+                            tp.setSelectedIndex(2);
+
                             String toDisplay = "<html><center>";
-                            toDisplay += "Mean: " + semArray[k].getStats().getMean() + "<br>";
-                            toDisplay += "Median: " + semArray[k].getStats().getMedian() + "<br>";
-                            if(semArray[k].getStats().getVariance() < 0){
-                                toDisplay += "Variance: -" + "<br>";
-                                toDisplay += "Standard Deviation: -" + "<br>";
+                            semArray[k].createStats();
+                            if(semArray[k].getStats() != null){
+                                toDisplay += "Mean: " + semArray[k].getStats().getMean() + "<br>";
+                                toDisplay += "Median: " + semArray[k].getStats().getMedian() + "<br>";
+                                if(semArray[k].getStats().getVariance() < 0){
+                                    toDisplay += "Variance: -" + "<br>";
+                                    toDisplay += "Standard Deviation: -" + "<br>";
+                                }
+                                else{
+                                    toDisplay += "Variance: " + semArray[k].getStats().getVariance() + "<br>";
+                                    toDisplay += "Standard Deviation: " + semArray[k].getStats().getStd() + "<br>";
+                                }
+                                toDisplay += "Minimum: " + semArray[k].getStats().getMinimum() + "<br>";
+                                toDisplay += "Maximum: " + semArray[k].getStats().getMaximum() + "<br>";
+                                toDisplay += "Number of Passed Courses : " + (int)semArray[k].getStats().getN() + "<br>";
+                                toDisplay += "</center></html>";
                             }
                             else{
-                                toDisplay += "Variance: " + semArray[k].getStats().getVariance() + "<br>";
-                                toDisplay += "Standard Deviation: " + semArray[k].getStats().getStd() + "<br>";
+                                toDisplay = "No Statistics available for this semester";
                             }
-                            toDisplay += "Minimum: " + semArray[k].getStats().getMinimum() + "<br>";
-                            toDisplay += "Maximum: " + semArray[k].getStats().getMaximum() + "<br>";
-                            toDisplay += "Passed Courses : " + semArray[k].getStats().getNumberOfPassedCourses() + "/" + (int)semArray[k].getStats().getN() + "<br>";
-                            statsMes = new JLabel(toDisplay);
-                            pCenter_inStats.add(statsMes);
-                            tp.setSelectedIndex(2);
+                            JLabel l_statsTitle = new JLabel("<html><center><h2>Semester's statistics</h2></center></html>");
+                            gbc.gridx = 0;
+                            gbc.gridy = 0;
+                            pCenter_inStats.add(l_statsTitle, gbc);
+
+                            l_stats = new JLabel(toDisplay);
+                            gbc.gridx = 0;
+                            gbc.gridy = 1;
+                            pCenter_inStats.add(l_stats, gbc);
+                            l_stats.setVisible(true);
+                            statsMes.setVisible(false);
                         }   
                     });
 
