@@ -256,9 +256,73 @@ public class Course {
 
             writer.write(sb.toString());
             writer.close();
-          } 
-          catch (FileNotFoundException e) {
+        } 
+        catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
-          }
         }
+    }
+
+    public static void edit_csv(String id, String newName, String newGrade){
+        String sem = "";
+        // get semester
+        try{
+            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            String row;
+            while ((row = csvReader.readLine()) != null) {
+                String[] data = row.split(",");
+                if(data[0].equals("semester")){
+                    sem = data[1];
+                    csvReader.close();
+                    break;
+                }
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();  
+        }
+        float newGradeFloat = Float.parseFloat(newGrade);
+        String newGraded = "true";
+        boolean newPassed = false;
+        if(newGradeFloat >= 5){
+            newPassed = true;
+        }
+
+        try (PrintWriter writer = new PrintWriter(new File(id + ".csv"))) {
+
+            writer.write("");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("name,");
+            sb.append(newName);
+            sb.append('\n');
+      
+            sb.append("semester,");
+            sb.append(sem);
+            sb.append('\n');
+      
+
+            sb.append("grade,");
+            sb.append(newGrade);
+            sb.append('\n');
+
+            sb.append("graded,");
+            sb.append(newGraded);
+            sb.append('\n');
+
+            sb.append("passed,");
+            sb.append(newPassed);
+            sb.append('\n');
+
+            writer.write(sb.toString());
+            writer.close();
+        } 
+        catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
+
+
+// writer.write(date);
+//             writer.write(",");
+//             writer.write(event);
