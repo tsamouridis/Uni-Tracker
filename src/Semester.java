@@ -25,7 +25,6 @@ public class Semester {
     public Semester() {
         this.serialNumber = -1;
         this.numberOfCourses = 0;
-        createStats();
     }
 
     // getters and setters
@@ -63,7 +62,6 @@ public class Semester {
     } 
 
     public Statistics getStats(){
-        createStats();
         return this.stats;
     }
 
@@ -165,10 +163,14 @@ public class Semester {
 
         semesterGrades = new float[numberOfCourses];
         for(int i=0 ; i<numOfGradedCourses ; i++){
+            semesterGrades[i] = -1;
+        }
+        for(int i=0 ; i<numOfGradedCourses ; i++){
             semesterGrades[i] = courses[indexOfGradedCourses[i]].getGrade();
         }
         if(numOfGradedCourses != 0){
             stats = new Statistics(semesterGrades, numOfGradedCourses);
+            // ! problem with array
         }
     }
 
