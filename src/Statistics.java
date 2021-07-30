@@ -2,30 +2,32 @@ import java.lang.Math;
 import java.util.Arrays;
 
 public class Statistics {
-    private int n;
+    // variables
+    private int n;      // number of passed courses
     private float mean;
     private float median;
     private float variance;
     private float std;
     private float minimum;
     private float maximum;
-    private int numberOfPassedCourses;
 
 
-    public int getNumberOfPassedCourses() {
-        return numberOfPassedCourses;
-    }
-
-    public void setNumberOfPassedCourses(float[] array) {
-        int res = 0;
+    // constructors
+    public Statistics(float[] array, int n) {
+        System.out.println("n = " + n);
         for(int i=0 ; i<n ; i++){
-            if(array[i] >= 5){
-                res++;
-            }
-            this.numberOfPassedCourses = res;
+            System.out.println(array[i]);
         }
+        this.n = n;
+        setMean(array);
+        setMedian(array);
+        setVariance(array);
+        setStd();
+        setMinimum(array);
+        setMaximum(array);
     }
 
+    // getters and setters
     public float getN() {
         return n;
     }
@@ -54,29 +56,25 @@ public class Statistics {
         return this.maximum;
     }
 
-    public Statistics(float[] array, int n) {
-        this.n = n;
-        setMean(array);
-        setMedian(array);
-        setVariance(array);
-        setStd();
-        setMinimum(array);
-        setMaximum(array);
-        setNumberOfPassedCourses(array);
-    }
-
+    
     public void setN(int n){
         this.n = n;
     }
 
-    public void setMean(float[] array){
+    public void setMean(float[] array){        
         float sum = 0;
-        for(int i=0 ; i<n ; i++){
-            sum += array[i];
+        for(int i=0 ; i<array.length ; i++){
+            if(array[i] < 0){
+                continue;
+            }
+            else{
+                sum += array[i];
+            }
         }
         this.mean = sum/n;
     }
 
+    // ! fix where -1 is present
     public void setMedian(float[] array){
         Arrays.sort(array);
         if(n == 1){
@@ -99,10 +97,25 @@ public class Statistics {
         }
         else{
             float sum = 0;
-            for(int i=0 ; i<n ; i++){
-                sum += Math.pow(array[i] - this.mean, 2);
+            for(int i=0 ; i<array.length ; i++){
+                if(array[i] < 0){
+                    continue;
+                }
+                else{
+                    float res = (array[i] - this.mean);
+                    sum += Math.pow(res, 2);
+                    // System.out.println("array" + array[i]);
+                    // System.out.println("mean" + this.mean);
+                    System.out.println("sum = " + sum);
+                    // System.out.println(array[i]);
+                    // System.out.println("sum of "+i+" = "+sum);
+                    // System.out.println("array of "+i+" = "+array[i]);
+                    // System.out.println("mean =  "+this.mean);
+                }                
             }
             this.variance = sum/(n-1);
+            // System.out.println("n = " + n);
+            // System.out.println(this.variance);
         }
     }
 
