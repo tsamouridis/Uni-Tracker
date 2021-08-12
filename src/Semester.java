@@ -77,7 +77,7 @@ public class Semester {
     }
 
 
-    public void addCourse(String name, int semester, float grade, boolean passed, boolean graded){
+    public void addCourse(String name, int semester, float grade, boolean graded, boolean passed){
         this.numberOfCourses ++;
         Course newCourseArray[] = new Course[numberOfCourses];
         for(int i=0 ; i<numberOfCourses-1 ; i++){
@@ -87,7 +87,7 @@ public class Semester {
         this.courses = newCourseArray;
     }
 
-    public void addCourse(String name, int semester, float grade, boolean passed, boolean graded, String id, boolean createFile){
+    public void addCourse(String name, int semester, float grade, boolean graded, boolean passed, String id, boolean createFile){
         this.numberOfCourses ++;
         Course newCourseArray[] = new Course[numberOfCourses];
         for(int i=0 ; i<numberOfCourses-1 ; i++){
@@ -98,7 +98,7 @@ public class Semester {
         this.courses = newCourseArray;
     }
 
-    public void addCourse(String name, int semester, float grade, boolean passed, boolean graded, boolean createFile){
+    public void addCourse(String name, int semester, float grade, boolean graded, boolean passed, boolean createFile){
         this.numberOfCourses ++;
         Course newCourseArray[] = new Course[numberOfCourses];
         for(int i=0 ; i<numberOfCourses-1 ; i++){
@@ -169,8 +169,7 @@ public class Semester {
             semesterGrades[i] = courses[indexOfGradedCourses[i]].getGrade();
         }
         if(numOfGradedCourses != 0){
-            stats = new Statistics(semesterGrades, numOfGradedCourses);
-            // ! problem with array
+            stats = new Statistics(semesterGrades);
         }
     }
 

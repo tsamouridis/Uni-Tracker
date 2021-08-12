@@ -111,6 +111,9 @@ public class Course {
         if(grade >= 5){
             this.passed = true;
         }
+        if(grade >= 0){
+            this.graded = true;
+        }
         write_csv();
     }
 

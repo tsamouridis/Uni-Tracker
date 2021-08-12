@@ -5,27 +5,29 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         Settings s = new Settings();
-        int numOfSemesters = Integer.parseInt(s.getSettings()[4]) * 2;  // set numOfSemesters
-        Semester semArray[] = new Semester[numOfSemesters];             // create array for semesters
-        for(int i=0 ; i<numOfSemesters ; i++){                          //initialize the semArray
-            semArray[i] = new Semester();
-            semArray[i].setSerialNumber(i);
+        if(s.getSettings()[0].equals("true")){
+            new StartGui();
         }
-        int courseNum = Course.getCourseNum();                          //read number of courses
+        else{
+            int numOfSemesters = Integer.parseInt(s.getSettings()[4]) * 2;  // set numOfSemesters
+            Semester semArray[] = new Semester[numOfSemesters];             // create array for semesters
+            for(int i=0 ; i<numOfSemesters ; i++){                          //initialize the semArray
+                semArray[i] = new Semester();
+                semArray[i].setSerialNumber(i);
+            }
+            int courseNum = Course.getCourseNum();                          //read number of courses
+            
+            String data[] = new String[5];
+            for(int i=0 ; i<courseNum ; i++){
+                String id = "C_"+i;
+                data = read_courseData(id);
+                int belongsToSem = Integer.parseInt(data[1]); 
+                semArray[belongsToSem-1].addCourse(data[0], Integer.parseInt(data[1]),
+                                                     Float.parseFloat(data[2]), Boolean.parseBoolean(data[3]), Boolean.parseBoolean(data[4]), id, false);
+            }
+            new MainGui(semArray);    
+        }
         
-        String data[] = new String[5];
-        for(int i=0 ; i<courseNum ; i++){
-            String id = "C_"+i;
-// System.out.println(id);
-            data = read_courseData(id);
-            int belongsToSem = Integer.parseInt(data[1]); 
-            semArray[belongsToSem-1].addCourse(data[0], Integer.parseInt(data[1]),
-                                                 Float.parseFloat(data[2]), Boolean.parseBoolean(data[3]), Boolean.parseBoolean(data[4]), id, false);
-// System.out.println(semArray[belongsToSem-1].getCourses()[0].getId());
-        }
-
-        new Gui(semArray);
-    
     }
 
     static String[] read_courseData(String id){ 

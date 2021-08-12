@@ -1,5 +1,9 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.Math;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.ArrayList;
 
 public class Statistics {
     // variables
@@ -10,21 +14,37 @@ public class Statistics {
     private float std;
     private float minimum;
     private float maximum;
-
+    private float[] allGrades;
+    ArrayList<Float> grades;
 
     // constructors
-    public Statistics(float[] array, int n) {
-        System.out.println("n = " + n);
-        for(int i=0 ; i<n ; i++){
-            System.out.println(array[i]);
+    public Statistics(float[] array) {
+        allGrades = new float[array.length];
+        grades = new ArrayList<Float>();
+        for(int i=0 ; i<array.length ; i++){
+            if(array[i] >= 5){
+                grades.add(array[i]);
+            }
+            allGrades[i] = array[i];
         }
-        this.n = n;
-        setMean(array);
-        setMedian(array);
-        setVariance(array);
-        setStd();
-        setMinimum(array);
-        setMaximum(array);
+        this.n = grades.size();
+        if(grades.size() == 0){
+            this.mean = -1;
+            this.median = -1;
+            this.variance= -1;
+            this.std = -1;
+            this.minimum = -1;
+            this.maximum = -1;
+        }
+        else{
+            setMean();
+            setMedian();
+            setVariance();
+            setStd();
+            setMinimum();
+            setMaximum();
+            generateGraphs();
+        }
     }
 
     // getters and setters
@@ -61,61 +81,42 @@ public class Statistics {
         this.n = n;
     }
 
-    public void setMean(float[] array){        
+    public void setMean(){        
         float sum = 0;
-        for(int i=0 ; i<array.length ; i++){
-            if(array[i] < 0){
-                continue;
-            }
-            else{
-                sum += array[i];
-            }
+        for(int i=0 ; i<grades.size() ; i++){
+            sum += grades.get(i);
         }
-        this.mean = sum/n;
+        this.mean = sum/grades.size();
     }
 
     // ! fix where -1 is present
-    public void setMedian(float[] array){
-        Arrays.sort(array);
-        if(n == 1){
-            this.median = array[0];
+    public void setMedian(){
+        Collections.sort(grades);
+        if(grades.size() == 1){
+            this.median = grades.get(0);
         }
-        else if (n%2 == 1){
-            int median_index = (int) Math.ceil((double) n/2);
-            this.median = array[median_index];
+        else if (grades.size() % 2 == 1){
+            int median_index = (int) Math.ceil((double) grades.size()/2);
+            this.median = grades.get(median_index);
         }
         else{
-            int x1 = (int) Math.floor((double)n/2) - 1;
+            int x1 = (int) Math.floor((double)grades.size()/2) - 1;
             int x2 = x1 + 1;
-            this.median = (array[x1]+array[x2])/2;
+            this.median = (grades.get(x1)+grades.get(x2))/2;
         }
     }
 
-    public void setVariance(float[] array){
-        if(n == 1){
+    public void setVariance(){
+        if(grades.size() == 1){
             this.variance = -1;
         }
         else{
             float sum = 0;
-            for(int i=0 ; i<array.length ; i++){
-                if(array[i] < 0){
-                    continue;
-                }
-                else{
-                    float res = (array[i] - this.mean);
-                    sum += Math.pow(res, 2);
-                    // System.out.println("array" + array[i]);
-                    // System.out.println("mean" + this.mean);
-                    System.out.println("sum = " + sum);
-                    // System.out.println(array[i]);
-                    // System.out.println("sum of "+i+" = "+sum);
-                    // System.out.println("array of "+i+" = "+array[i]);
-                    // System.out.println("mean =  "+this.mean);
-                }                
+            for(int i=0 ; i<grades.size() ; i++){
+                float res = (grades.get(i) - this.mean);
+                sum += Math.pow(res, 2);
             }
-            this.variance = sum/(n-1);
-            // System.out.println("n = " + n);
-            // System.out.println(this.variance);
+            this.variance = sum/(grades.size()-1);
         }
     }
 
@@ -128,13 +129,31 @@ public class Statistics {
         }
     }
 
-    public void setMinimum(float[] array){
-        Arrays.sort(array);
-        this.minimum = array[0];
+    public void setMinimum(){
+        Collections.sort(grades);
+        this.minimum = grades.get(0);
     }
 
-    public void setMaximum(float[] array){
-        Arrays.sort(array);
-        this.maximum = array[n-1];    
+    public void setMaximum(){
+        Collections.sort(grades);
+
+        this.maximum = grades.get(grades.size()-1);  
+    }
+
+    public void generateGraphs(){
+        String[] command = new String[allGrades.length+2];
+        command[0] = "python";
+        command[1] = "src/plotter.py";
+        for(int i=2 ; i<command.length ; i++){
+            command[i] = String.valueOf(allGrades[i-2]);    // float to string
+        }
+        try{
+
+            // Runtime.getRuntime().exec(command);
+            Process p = Runtime.getRuntime().exec(command);
+        }
+        catch (IOException e) {
+            System.out.println("exception happened");
+        }
     }
 }
