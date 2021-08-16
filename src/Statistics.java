@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.Math;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -148,9 +146,7 @@ public class Statistics {
             command[i] = String.valueOf(allGrades[i-2]);    // float to string
         }
         try{
-
-            // Runtime.getRuntime().exec(command);
-            Process p = Runtime.getRuntime().exec(command);
+            Runtime.getRuntime().exec(command);
         }
         catch (IOException e) {
             System.out.println("exception happened");
