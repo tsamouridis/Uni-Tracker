@@ -87,7 +87,6 @@ public class Statistics {
         this.mean = sum/grades.size();
     }
 
-    // ! fix where -1 is present
     public void setMedian(){
         Collections.sort(grades);
         if(grades.size() == 1){
@@ -143,7 +142,7 @@ public class Statistics {
         command[0] = "python";
         command[1] = "src/plotter.py";
         for(int i=2 ; i<command.length ; i++){
-            command[i] = String.valueOf(allGrades[i-2]);    // float to string
+            command[i] = String.valueOf(allGrades[i-2]);
         }
         try{
             Runtime.getRuntime().exec(command);

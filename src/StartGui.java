@@ -14,9 +14,7 @@ public class StartGui {
     Settings s;
     GridBagConstraints gbc;
 
-// * components of frame 1 ///////////////////////////////////////////////////////////////////////////////////////////////////
     StartGui(){
-        // * components of frame 1 ///////////////////////////////////////////////////////////////////////////////////////////////////
         s = new Settings();
 
         // frame
@@ -151,8 +149,8 @@ public class StartGui {
                 if(ok){
                     int ans = JOptionPane.showConfirmDialog(frame, "Are you sure you want to save the information?");
                     if(ans == JOptionPane.YES_OPTION){  
-                        frame.setVisible(false); // Set frame's visibility to false
-                        frame.dispose(); // Destroy the frame
+                        frame.setVisible(false); 
+                        frame.dispose();
                         String[] newSettings = {"false", data[0], data[1], data[2], data[3]};
                         s.editSettings(newSettings);
                         

@@ -21,7 +21,7 @@ public class Settings {
     // methods
     public String[] getSettings(){
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader("settings.csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/settings.csv"));
             String row = csvReader.readLine();
             this.allSettings = row.split(",");
             csvReader.close();
@@ -33,7 +33,7 @@ public class Settings {
     }
 
     public void editSettings(String[] newSettings){
-        try (PrintWriter writer = new PrintWriter(new File("settings.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("csvFiles/settings.csv"))) {
             StringBuilder sb = new StringBuilder();
             int i = 0;
             for(i=0 ; i<newSettings.length-1 ; i++){

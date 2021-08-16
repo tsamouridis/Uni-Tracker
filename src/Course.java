@@ -130,7 +130,7 @@ public class Course {
     public static int getCourseNum(){
         int courseNum = -1;
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader("courseNum.csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/courseNum.csv"));
             String row;
             row = csvReader.readLine();
             String[] data = row.split(",");
@@ -144,7 +144,7 @@ public class Course {
     }
 
     public void saveCourseNum(int num){ 
-        try (PrintWriter writer = new PrintWriter(new File("courseNum.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("csvFiles/courseNum.csv"))) {
 
             StringBuilder sb = new StringBuilder();
             
@@ -161,7 +161,7 @@ public class Course {
     
     public void createFile(){
         try {
-            File myObj = new File(id + ".csv");
+            File myObj = new File("csvFiles/"+ id + ".csv");
             if (myObj.createNewFile()) {
                 write_csv();
                 System.out.println("File created: " + myObj.getName());
@@ -178,7 +178,7 @@ public class Course {
 
     public void read_csv(){ 
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/" + id + ".csv"));
             String row;
             int count = 0;
             while ((row = csvReader.readLine()) != null) {
@@ -201,7 +201,7 @@ public class Course {
     public void read_csv(String id){ 
         this.id = id;
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/" + id + ".csv"));
             String row;
             int count = 0;
             while ((row = csvReader.readLine()) != null) {
@@ -233,7 +233,7 @@ public class Course {
     }
 
     public void write_csv(){ 
-        try (PrintWriter writer = new PrintWriter(new File(id + ".csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("csvFiles/" + id + ".csv"))) {
 
             StringBuilder sb = new StringBuilder();
             sb.append("name,");
@@ -269,7 +269,7 @@ public class Course {
         String sem = "";
         // get semester
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/" + id + ".csv"));
             String row;
             while ((row = csvReader.readLine()) != null) {
                 String[] data = row.split(",");
@@ -290,7 +290,7 @@ public class Course {
             newPassed = true;
         }
 
-        try (PrintWriter writer = new PrintWriter(new File(id + ".csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("csvFiles/" + id + ".csv"))) {
 
             writer.write("");
 
@@ -324,8 +324,3 @@ public class Course {
         }
     }
 }
-
-
-// writer.write(date);
-//             writer.write(",");
-//             writer.write(event);

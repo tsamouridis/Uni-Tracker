@@ -33,7 +33,7 @@ public class Main {
     static String[] read_courseData(String id){ 
         String[] data = new String[5];
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader(id + ".csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/" + id + ".csv"));
             String row;
             int count = 0;
             while ((row = csvReader.readLine()) != null) {

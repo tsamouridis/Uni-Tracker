@@ -176,7 +176,7 @@ public class Semester {
     public int getCourseNum(){
         int courseNum = -1;
         try{
-            BufferedReader csvReader = new BufferedReader(new FileReader("courseNum.csv"));
+            BufferedReader csvReader = new BufferedReader(new FileReader("csvFiles/courseNum.csv"));
             String row;
             row = csvReader.readLine();
             String[] data = row.split(",");

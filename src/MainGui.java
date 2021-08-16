@@ -6,8 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.event.*;
 
 public class MainGui {
-
-    // ! change name to selected semester index
+    // variables
     ImageIcon img;
     int k;      
     GridBagConstraints gbc;
@@ -40,8 +39,6 @@ public class MainGui {
 
         // GridBagConstraints used when components are added
         gbc = new GridBagConstraints();
-
-        // * components of frame 2 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // panels
         tp = new JTabbedPane();
@@ -65,7 +62,7 @@ public class MainGui {
         pEast.setBackground(Color.decode("#324ca8"));
 
 
-        // menuBer
+        // menuBar
         mb = new JMenuBar();  
         menu = new JMenu();
         i1=new JMenuItem("Item 1");
