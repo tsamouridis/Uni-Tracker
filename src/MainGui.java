@@ -54,15 +54,15 @@ public class MainGui {
 
         pWest = new JPanel();
         pWest.setLayout(new GridBagLayout());
-        pWest.setBackground(Color.decode("#3667e0"));
+        pWest.setBackground(Color.decode("#324ca8"));
 
         pTop = new JPanel();
         pTop.setLayout(new GridBagLayout());
-        pTop.setBackground(Color.decode("#3667e0"));
+        pTop.setBackground(Color.decode("#324ca8"));
 
         pEast = new JPanel();
         pEast.setLayout(new GridBagLayout());
-        pEast.setBackground(Color.decode("#3667e0"));
+        pEast.setBackground(Color.decode("#324ca8"));
 
 
         // menuBer
@@ -191,7 +191,8 @@ public class MainGui {
                     gbc.gridy = 0;
                     pCenter_inSemester.add(l_SemesterTitle, gbc);
 
-                    b_back = new JButton("Back to main menu");
+                    b_back = new JButton(" < Back to main menu");
+                    b_back.setToolTipText("Return to Semester menu");
                     gbc.gridx = 0;
                     gbc.gridy = 1;
                     gbc.gridwidth = 2;
@@ -199,6 +200,7 @@ public class MainGui {
 
                     if(semArray[k].getNumberOfCourses() == 0){
                         JLabel noCourseMessage = new JLabel("There are no courses in this semester yet...");
+                        noCourseMessage.setBackground(Color.GRAY);
                         gbc.gridx = 0;
                         gbc.gridy = j+2;
                         gbc.gridwidth = 1;
@@ -211,6 +213,7 @@ public class MainGui {
                         gbc.ipadx = 0;
                         for(j=0 ; j<semArray[k].getNumberOfCourses() ; j++){
                             b_courses[j] = new JButton("<html><font face=\"Serif\" size=\"+1\">" + semArray[k].getCourses()[j].getName()+ "</font></html>");
+                            b_courses[j].setToolTipText("Edit Name and/or Grade of Course");
                             b_courses[j].setName(semArray[k].getCourses()[j].getId());
                             b_courses[j].setBackground(Color.WHITE);
                             b_courses[j].setForeground(Color.BLACK);
@@ -231,7 +234,15 @@ public class MainGui {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     JButton pressed = (JButton) e.getSource();
-                                    oldName = pressed.getText();
+                                    String oldNameRaw = pressed.getText();
+                                    oldName = "";
+                                    oldName += oldNameRaw.charAt(35);
+                                    int iter = 36;
+                                    while(oldNameRaw.charAt(iter) != '<' && oldNameRaw.charAt(iter+1)!='/' && oldNameRaw.charAt(iter+2) != 'f' && oldNameRaw.charAt(iter+3)!= 'o' && oldNameRaw.charAt(iter+4)!= 'n' && oldNameRaw.charAt(iter+5)!= 't' && oldNameRaw.charAt(iter+6)!= '>'){
+                                        oldName += oldNameRaw.charAt(iter);
+                                        iter++;
+                                    }
+                                    
                                     fileId = pressed.getName();
                                     JFrame optionPane = new JFrame("Edit Course info");
                                     optionPane.setIconImage(img.getImage());
@@ -247,6 +258,7 @@ public class MainGui {
 
                                     JPanel p = new JPanel();
                                     p.setLayout(new GridBagLayout());
+                                    gbc.gridwidth = 1;
                                     gbc.fill = GridBagConstraints.HORIZONTAL;
                                     gbc.ipadx = 200;
                                     gbc.ipady = 20;
@@ -266,6 +278,8 @@ public class MainGui {
 
                                     JButton b_ok = new JButton("Confirm");
                                     JButton b_cancel = new JButton("Cancel");
+                                    b_cancel.setBackground(Color.RED);
+                                    b_cancel.setForeground(Color.WHITE);
                                     gbc.gridx = 0;
                                     gbc.gridy = 2;
                                     p.add(b_ok, gbc);
@@ -289,20 +303,18 @@ public class MainGui {
                                             
                                             // open file and edit 
                                             Course.edit_csv(fileId, newCourse_name, newCourse_grade);
-
+                                            p.removeAll();
+                                            optionPane.removeAll();
                                             optionPane.setVisible(false);
                                             optionPane.dispose();
-                                            pCenter_inSemester.removeAll();
-                                            b_semesters[k].doClick();
-
-// ! change button and grade text
-
                                         }   
                                     });
 
                                     b_cancel.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
+                                            p.removeAll();
+                                            optionPane.removeAll();
                                             optionPane.setVisible(false);
                                             optionPane.dispose();
                                         }   
@@ -312,13 +324,15 @@ public class MainGui {
                         }    
                     }
                     
-                    b_addCourse = new JButton("Add a new course to this semester");
+                    b_addCourse = new JButton("Add Course");
+                    b_addCourse.setToolTipText("Add a new course to this semester");
                     gbc.gridwidth = 1;
                     gbc.gridx = 0;
                     gbc.gridy = j+2;
                     pCenter_inSemester.add(b_addCourse, gbc);
 
                     b_showStats = new JButton("Show Stats");
+                    b_showStats.setToolTipText("Shows statistics of this semester and generates statistical graphs shown as png files. This process might take a while");
                     gbc.gridwidth = 1;
                     gbc.gridx = 1;
                     gbc.gridy = j+2;
@@ -334,7 +348,6 @@ public class MainGui {
                             tp.setSelectedIndex(0);
                             pCenter_inSemester.removeAll();
                             pCenter_inSemester.setVisible(false);
-                            // pCenter.setEnabled(true);
                             pCenter.setVisible(true);
                         }   
                     });
@@ -343,7 +356,7 @@ public class MainGui {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             tp.setSelectedIndex(2);
-                            String toDisplay = "<html><center>";
+                            String toDisplay = "<html><center><font face=\"Serif\" size=\"+1\"";
                             semArray[k].createStats();
                             
                             if(semArray[k].getStats() != null){
@@ -360,7 +373,7 @@ public class MainGui {
                                 toDisplay += "Minimum: " + semArray[k].getStats().getMinimum() + "<br>";
                                 toDisplay += "Maximum: " + semArray[k].getStats().getMaximum() + "<br>";
                                 toDisplay += "Number of Passed Courses : " + (int)semArray[k].getStats().getN() + "<br>";
-                                toDisplay += "</center></html>";
+                                toDisplay += "</font></center></html>";
                             }
                             else{
                                 toDisplay = "No Statistics available for this semester";
@@ -412,19 +425,21 @@ public class MainGui {
                             gbc.gridy = 1;
                             p.add(t_newCourseGrade, gbc);
 
-                            JButton b_ok = new JButton("Confirm");
-                            JButton b_cancel = new JButton("Cancel");
+                            JButton b_ok2 = new JButton("Confirm");
+                            JButton b_cancel2 = new JButton("Cancel");
+                            b_cancel2.setBackground(Color.RED);
+                            b_cancel2.setForeground(Color.WHITE);
                             gbc.gridx = 0;
                             gbc.gridy = 2;
-                            p.add(b_ok, gbc);
+                            p.add(b_ok2, gbc);
                             gbc.gridx = 1;
                             gbc.gridy = 2;
-                            p.add(b_cancel, gbc);
+                            p.add(b_cancel2, gbc);
 
                             optionPane.add(p);
                             optionPane.setVisible(true);
                             
-                            b_ok.addActionListener(new ActionListener() {
+                            b_ok2.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     //save data
@@ -439,7 +454,7 @@ public class MainGui {
                                 }   
                             });
 
-                            b_cancel.addActionListener(new ActionListener() {
+                            b_cancel2.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     optionPane.setVisible(false);
