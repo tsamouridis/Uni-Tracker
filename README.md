@@ -21,8 +21,8 @@ When first opened, the applcation opens a window that prompts the user to enter 
 
 # What to do next
 * Create a menu bar to edit the application's information and style
-* Delete a course when user wants to
-* statistics for all the courses together
+* Enable user to delete a course when desired
+* statistics for all the courses together - not per semester only
 
 # Author
 [Thanasis Tsamouridis](https://github.com/tsamouridis)
