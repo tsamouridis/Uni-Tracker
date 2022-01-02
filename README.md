@@ -1,12 +1,12 @@
 # Uni-Tracker
-A Desktop App to keep track of your University Progress 
+A Desktop App to keep track of University Progress 
 
 # How it works
-When first opened, the applcation opens a window that prompts the user to enter some basic information about them and their university. After the information is provided, the app opens its main section where someone:
-* Can browse the semester's Courses of its university
+When first opened, the application a window is shown that prompts the user to enter some basic information about them and their university. After the information is provided, the main window is opened, where someone:
+* Can browse the semesters' Courses of their university
 * Enter new courses for each semester
 * See and edit courses' Grades
-* See statistics and graphs(shown as png files) of her/his performance for each semester 
+* See statistics and graphs(shown as png files) of their performance for each semester 
 
 ## Screenshots
 ### First opened
