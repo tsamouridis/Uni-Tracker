@@ -13,9 +13,9 @@ public class MainGui {
     JFrame mainFrame;
     JPanel pCenter, pWest, pTop, pEast, pCenter_inSemester, pCenter_inStats;
     JTabbedPane tp;
-    JMenu menu;
+    JMenu m_settings, m_courses;
     JMenuBar mb;
-    JMenuItem i1, i2;
+    JMenuItem i11, i12, i21, i22, i23;
     JButton[] b_semesters, b_courses;
     JLabel[] l_semesters;
     JLabel l_title;
@@ -64,14 +64,22 @@ public class MainGui {
 
         // menuBar
         mb = new JMenuBar();  
-        menu = new JMenu();
-        i1=new JMenuItem("Item 1");
-        i2=new JMenuItem("Item 2");
-        menu.add(i1);
-        menu.add(i2);
-        JMenu subMenu=new JMenu("Sub Menu"); 
-        menu.add(subMenu);  
-        mb.add(menu);  
+        m_settings = new JMenu("Settings");
+        m_courses = new JMenu("Courses");
+        i11 = new JMenuItem("Edit information");
+        i12 = new JMenuItem("Appearance Settings");
+        i21 = new JMenuItem("Edit Course");
+        i22 = new JMenuItem("Delete Course");
+        i23 = new JMenuItem("Add Course");
+        m_settings.add(i11);
+        m_settings.add(i12);
+        m_courses.add(i21);
+        m_courses.add(i22);
+        m_courses.add(i23);
+        // JMenu subMenu=new JMenu("Sub Menu"); 
+        // menu.add(subMenu);  
+        mb.add(m_settings);  
+        mb.add(m_courses);  
         mainFrame.setJMenuBar(mb);        
 
         // l_title
