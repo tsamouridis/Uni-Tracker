@@ -19,7 +19,7 @@ When first opened, the applcation opens a window that prompts the user to enter 
 <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im3.png" alt="demo1" width="300"/>
 <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im4.png" alt="demo1" width="300"/> 
 
-# What to do next
+# What next
 * Create a menu bar to edit the application's information and style
 * Enable user to delete a course when desired
 * statistics for all the courses together - not per semester only
