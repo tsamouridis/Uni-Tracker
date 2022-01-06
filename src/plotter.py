@@ -1,17 +1,16 @@
 from matplotlib import pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import matplotlib
 import numpy as np
 import sys
 import os
+
 matplotlib.rcParams['mathtext.fontset'] = 'cm'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['axes.axisbelow'] = True
 plt.rcParams["figure.figsize"] = (15,10)
 plt.rcParams['axes.titlesize'] = 20
 plt.rcParams['axes.labelsize'] = 20
-
-from matplotlib.ticker import MaxNLocator
-
 
 # prepare data
 data = []
