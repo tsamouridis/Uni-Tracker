@@ -9,13 +9,13 @@ When first opened, the application a window is shown that prompts the user to en
 * See statistics and graphs(shown as png files) of their performance for each semester 
 
 ## Screenshots
-### First opened
+## First opened
 <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im0.png" alt="demo1" width="300"/>
 
-### Main window
+## Main window
 <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im1.png" alt="demo1" width="300"/> <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im2.png" alt="demo1" width="300"/> 
 
-### Graphs example
+## Graphs example
 <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im3.png" alt="demo1" width="300"/>
 <img src="https://github.com/tsamourid/Uni-Tracker/blob/main/screenshots/im4.png" alt="demo1" width="300"/> 
 
