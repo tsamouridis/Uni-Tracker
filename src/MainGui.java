@@ -1,6 +1,5 @@
 import java.awt.*;
 import javax.swing.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.*;
@@ -26,9 +25,21 @@ public class MainGui {
     String newCourse_name, fileId, oldName;
     JLabel l_stats;
     Settings s;
+    Color color_inside, color_outside, color_letters;
 
     MainGui(Semester[] semArray){
         s = new Settings();
+        int temp = 2;
+        if(temp == 1){
+            color_inside = Color.WHITE;
+            color_letters = Color.BLACK;
+            color_outside = Color.decode("#324ca8");
+        }
+        else{
+            color_inside = Color.decode("#222d36");
+            color_outside = Color.BLACK;
+            color_letters = Color.WHITE;
+        }
          // mainFrame
         mainFrame = new JFrame("Uni-Tracker");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,22 +55,22 @@ public class MainGui {
         tp = new JTabbedPane();
 
         pCenter = new JPanel();
-        pCenter.setBackground(Color.WHITE);
+        pCenter.setBackground(color_inside);
         pCenter.setLayout(new GridBagLayout());
         scroll2 = new JScrollPane(pCenter);  
         scroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
 
         pWest = new JPanel();
         pWest.setLayout(new GridBagLayout());
-        pWest.setBackground(Color.decode("#324ca8"));
+        pWest.setBackground(color_outside);
 
         pTop = new JPanel();
         pTop.setLayout(new GridBagLayout());
-        pTop.setBackground(Color.decode("#324ca8"));
+        pTop.setBackground(color_outside);
 
         pEast = new JPanel();
         pEast.setLayout(new GridBagLayout());
-        pEast.setBackground(Color.decode("#324ca8"));
+        pEast.setBackground(color_outside);
 
 
         // menuBar
@@ -102,6 +113,7 @@ public class MainGui {
             b_semesters[i] = new JButton(text);
             if(i%2 == 0){
                 JLabel lab = new JLabel("Year " + year);
+                lab.setForeground(color_letters);
                 year++;
                 gbc.ipadx = 40;
                 gbc.ipady = 5;
@@ -133,7 +145,7 @@ public class MainGui {
         mainFrame.add(pTop, BorderLayout.NORTH);   
 
         pCenter_inSemester = new JPanel();
-        pCenter_inSemester.setBackground(Color.WHITE);
+        pCenter_inSemester.setBackground(color_inside);
         pCenter_inSemester.setLayout(new GridBagLayout());
         tp.add(pCenter_inSemester, "Semester Grades");
         scroll = new JScrollPane(pCenter_inSemester);  
@@ -142,7 +154,7 @@ public class MainGui {
 
         pCenter_inStats = new JPanel();
         pCenter_inStats.setLayout(new GridBagLayout());
-        pCenter_inStats.setBackground(Color.WHITE);
+        pCenter_inStats.setBackground(color_inside);
         
         tp.add(pCenter_inStats, "Semester Grades");
         mainFrame.setVisible(true);
@@ -168,6 +180,62 @@ public class MainGui {
                 }
             }
         });
+
+        i12.addActionListener(new ActionListener(){  
+            public void actionPerformed(ActionEvent e){  
+                JFrame f_themePick = new JFrame("Theme Selection");
+
+                f_themePick.setIconImage(img.getImage());
+                f_themePick.setLayout(new GridBagLayout());
+                f_themePick.setSize(350, 200);
+                f_themePick.setResizable(false);
+                JLabel l_themeSelection = new JLabel("Select Theme: ");
+                JRadioButton rb_darkTheme = new JRadioButton("Dark Theme");
+                JRadioButton rb_lightTheme = new JRadioButton("Light Theme");
+                ButtonGroup bg=new ButtonGroup();    
+                bg.add(rb_darkTheme);bg.add(rb_lightTheme); 
+                rb_darkTheme.setSelected(true);
+                JPanel p = new JPanel();
+                p.setLayout(new GridBagLayout());
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.ipadx = 10;
+                gbc.ipady = 10;
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.gridwidth = 2;
+                p.add(l_themeSelection, gbc);
+                gbc.gridx = 0;
+                gbc.gridy = 1;
+                gbc.gridwidth = 1;
+                p.add(rb_darkTheme, gbc);
+                gbc.gridx = 1;
+                gbc.gridy = 1;
+                p.add(rb_lightTheme, gbc);
+                
+                JButton b_ok = new JButton("Confirm");
+                gbc.gridx = 0;
+                gbc.gridy = 2;
+                gbc.gridwidth = 2;
+                p.add(b_ok, gbc);
+
+                f_themePick.add(p);
+                f_themePick.setVisible(true);
+
+                b_ok.addActionListener(new ActionListener(){  
+                    public void actionPerformed(ActionEvent e){
+                        if(rb_darkTheme.isSelected()){
+                            System.out.println("dark");
+                        }
+                        else if(rb_lightTheme.isSelected()){
+                            System.out.println("light");
+                        }
+                        f_themePick.removeAll();
+                        f_themePick.setVisible(false);
+                        f_themePick.dispose();
+                    }   
+                });
+            }
+        });  
 
         for(int i=0 ; i<numOfSemesters ; i++){
             b_semesters[i].addActionListener(new ActionListener() {
@@ -205,7 +273,7 @@ public class MainGui {
 
                     if(semArray[k].getNumberOfCourses() == 0){
                         JLabel noCourseMessage = new JLabel("There are no courses in this semester yet...");
-                        noCourseMessage.setBackground(Color.GRAY);
+                        noCourseMessage.setForeground(color_letters);
                         gbc.gridx = 0;
                         gbc.gridy = j+2;
                         gbc.gridwidth = 1;
@@ -384,11 +452,13 @@ public class MainGui {
                                 toDisplay = "No Statistics available for this semester";
                             }
                             JLabel l_statsTitle = new JLabel("<html><center><h2>Semester's statistics for passed Courses</h2></center></html>");
+                            l_statsTitle.setForeground(color_letters);
                             gbc.gridx = 0;
                             gbc.gridy = 0;
                             pCenter_inStats.add(l_statsTitle, gbc);
 
                             l_stats = new JLabel(toDisplay);
+                            l_stats.setForeground(color_letters);
                             gbc.gridx = 0;
                             gbc.gridy = 1;
                             pCenter_inStats.add(l_stats, gbc);
