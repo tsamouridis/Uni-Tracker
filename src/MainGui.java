@@ -29,13 +29,16 @@ public class MainGui {
 
     MainGui(Semester[] semArray){
         s = new Settings();
-        int temp = 2;
-        if(temp == 1){
+        String theme = s.getSettings()[5];
+        System.out.println(theme);
+        if(theme.equals("light")){
+            System.out.println("in light");
             color_inside = Color.WHITE;
             color_letters = Color.BLACK;
             color_outside = Color.decode("#324ca8");
         }
         else{
+            System.out.println("in dark");
             color_inside = Color.decode("#222d36");
             color_outside = Color.BLACK;
             color_letters = Color.WHITE;
@@ -223,15 +226,32 @@ public class MainGui {
 
                 b_ok.addActionListener(new ActionListener(){  
                     public void actionPerformed(ActionEvent e){
+                        boolean restart = false;
                         if(rb_darkTheme.isSelected()){
                             System.out.println("dark");
+                            String[] temp = s.getSettings();
+                            if(!temp[5].equals("dark") ){
+                                temp[5] = "dark";
+                                s.editSettings(temp);
+                                restart = true;
+                            }
                         }
                         else if(rb_lightTheme.isSelected()){
                             System.out.println("light");
+                            String[] temp = s.getSettings();
+                            if(!temp[5].equals("light") ){
+                                temp[5] = "light";
+                                s.editSettings(temp);
+                                restart = true;
+                            }
                         }
                         f_themePick.removeAll();
                         f_themePick.setVisible(false);
                         f_themePick.dispose();
+                        if(restart == true){
+                            mainFrame.dispose();
+                            new MainGui(semArray);
+                        }
                     }   
                 });
             }

@@ -151,7 +151,7 @@ public class StartGui {
                     if(ans == JOptionPane.YES_OPTION){  
                         frame.setVisible(false); 
                         frame.dispose();
-                        String[] newSettings = {"false", data[0], data[1], data[2], data[3]};
+                        String[] newSettings = {"false", data[0], data[1], data[2], data[3], "light"};
                         s.editSettings(newSettings);
                         
                         // ! edit bellow
