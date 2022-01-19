@@ -6,7 +6,7 @@ import javax.swing.event.*;
 
 public class MainGui {
     // variables
-    ImageIcon img;
+    ImageIcon img, img_settings, img_info, img_style;
     int k;      
     GridBagConstraints gbc;
     JFrame mainFrame;
@@ -25,23 +25,22 @@ public class MainGui {
     String newCourse_name, fileId, oldName;
     JLabel l_stats;
     Settings s;
-    Color color_inside, color_outside, color_letters;
+    Color color_inside, color_outside, color_letters, color_semester;
 
     MainGui(Semester[] semArray){
         s = new Settings();
         String theme = s.getSettings()[5];
-        System.out.println(theme);
         if(theme.equals("light")){
-            System.out.println("in light");
             color_inside = Color.WHITE;
             color_letters = Color.BLACK;
             color_outside = Color.decode("#324ca8");
+            color_semester = Color.BLUE;
         }
         else{
-            System.out.println("in dark");
             color_inside = Color.decode("#222d36");
             color_outside = Color.BLACK;
             color_letters = Color.WHITE;
+            color_semester = Color.WHITE;
         }
          // mainFrame
         mainFrame = new JFrame("Uni-Tracker");
@@ -49,7 +48,7 @@ public class MainGui {
         mainFrame.setLayout(new BorderLayout());
         img = new ImageIcon("icons/icon2.png");
         mainFrame.setIconImage(img.getImage());
-        mainFrame.setSize(700, 500);
+        mainFrame.setSize(700, 550);
 
         // GridBagConstraints used when components are added
         gbc = new GridBagConstraints();
@@ -78,10 +77,16 @@ public class MainGui {
 
         // menuBar
         mb = new JMenuBar();  
+        
+        img_settings = new ImageIcon("icons/settings-gear.png");
+        img_info = new ImageIcon("icons/info.png");
+        img_style = new ImageIcon("icons/style.png");
+        
         m_settings = new JMenu("Settings");
+        m_settings.setIcon(img_settings);
         m_courses = new JMenu("Courses");
-        i11 = new JMenuItem("Edit information");
-        i12 = new JMenuItem("Appearance Settings");
+        i11 = new JMenuItem("Edit information", img_info);
+        i12 = new JMenuItem("Appearance Settings", img_style);
         i21 = new JMenuItem("Edit Course");
         i22 = new JMenuItem("Delete Course");
         i23 = new JMenuItem("Add Course");
@@ -184,6 +189,116 @@ public class MainGui {
             }
         });
 
+        i11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] temp = s.getSettings();
+
+                JFrame f_infoEdit = new JFrame("Information Edit");
+                JPanel p = new JPanel();
+                p.setLayout(new GridBagLayout());
+
+                f_infoEdit.setIconImage(img.getImage());
+                f_infoEdit.setLayout(new GridBagLayout());
+                f_infoEdit.setSize(800, 400);
+                f_infoEdit.setResizable(false);
+
+                int numberOfInfo = 3;
+                JLabel[] l_info = new JLabel[numberOfInfo];
+                JTextField[] tf_info= new JTextField[numberOfInfo];
+                for(int i=0 ; i<numberOfInfo ; i++){
+                    l_info[i] = new JLabel();
+                    tf_info[i] = new JTextField();
+                    tf_info[i].setSize(100, 100);
+                }
+                l_info[0].setText("Full Name: ");
+                tf_info[0].setText(temp[1]);
+
+                l_info[1].setText("University: ");
+                tf_info[1].setText(temp[2]);
+
+                l_info[2].setText("Department: ");
+                tf_info[2].setText(temp[3]);
+
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                p.add(l_info[0], gbc);
+                gbc.gridx = 1;
+                gbc.gridy = 0;
+                p.add(tf_info[0], gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 1;
+                p.add(l_info[1], gbc);
+                gbc.gridx = 1;
+                gbc.gridy = 1;
+                p.add(tf_info[1], gbc);
+
+                gbc.gridx = 0;
+                gbc.gridy = 2;
+                p.add(l_info[2], gbc);
+                gbc.gridx = 1;
+                gbc.gridy = 2;
+                p.add(tf_info[2], gbc);
+                
+                JButton b_save = new JButton("Save");
+                gbc.gridx = 0;
+                gbc.gridy = 3;
+                p.add(b_save, gbc);
+
+                JButton b_cancel = new JButton("cancel");
+                gbc.gridx = 1;
+                gbc.gridy = 3;
+                p.add(b_cancel, gbc);
+
+
+                JLabel l_warning1 = new JLabel("<html><h1>DANGER ZONE</h1></html>");
+                JLabel l_warning2 = new JLabel("If you wish to change the number of years in your university the app should be reinitialized and all your data will be lost.");
+                JButton b_reinitialize = new JButton("Yes, delete all my data and initialize the application.");
+                b_reinitialize.setForeground(Color.WHITE);
+                b_reinitialize.setBackground(Color.RED);
+                b_reinitialize.setEnabled(false);
+                b_reinitialize.setToolTipText("This feature will be available in the future");
+                gbc.gridx = 0;
+                gbc.gridy = 4;
+                gbc.gridwidth = 2;
+                p.add(l_warning1, gbc);
+                gbc.gridx = 0;
+                gbc.gridy = 5;
+                p.add(l_warning2, gbc);
+                gbc.gridx = 0;
+                gbc.gridy = 6;
+                p.add(b_reinitialize, gbc);
+
+                f_infoEdit.add(p);
+                f_infoEdit.setVisible(true);
+
+                b_save.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        temp[1] = tf_info[0].getText();
+                        temp[2] = tf_info[1].getText();
+                        temp[3] = tf_info[2].getText();
+                        s.editSettings(temp);
+                        f_infoEdit.setVisible(false);
+                        f_infoEdit.dispose();
+                        mainFrame.setVisible(false);
+                        mainFrame.dispose();
+                        new MainGui(semArray);
+                    }   
+                });
+
+                b_cancel.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        f_infoEdit.setVisible(false);
+                        f_infoEdit.dispose();
+                    }   
+                });
+            }   
+        });
+
         i12.addActionListener(new ActionListener(){  
             public void actionPerformed(ActionEvent e){  
                 JFrame f_themePick = new JFrame("Theme Selection");
@@ -228,7 +343,6 @@ public class MainGui {
                     public void actionPerformed(ActionEvent e){
                         boolean restart = false;
                         if(rb_darkTheme.isSelected()){
-                            System.out.println("dark");
                             String[] temp = s.getSettings();
                             if(!temp[5].equals("dark") ){
                                 temp[5] = "dark";
@@ -237,7 +351,6 @@ public class MainGui {
                             }
                         }
                         else if(rb_lightTheme.isSelected()){
-                            System.out.println("light");
                             String[] temp = s.getSettings();
                             if(!temp[5].equals("light") ){
                                 temp[5] = "light";
@@ -249,6 +362,7 @@ public class MainGui {
                         f_themePick.setVisible(false);
                         f_themePick.dispose();
                         if(restart == true){
+                            mainFrame.setVisible(false);
                             mainFrame.dispose();
                             new MainGui(semArray);
                         }
@@ -274,7 +388,7 @@ public class MainGui {
 
                     String semesterTitle = "<html><center><h2>Semester " + (k+1) + "</h2></center></html>";
                     JLabel l_SemesterTitle = new JLabel(semesterTitle); 
-                    l_SemesterTitle.setForeground(Color.BLUE);
+                    l_SemesterTitle.setForeground(color_semester);
                     b_courses = new JButton[semArray[k].getNumberOfCourses()]; 
                     JLabel[] l_grades = new JLabel[semArray[k].getNumberOfCourses()];
                     int j = 0; 
